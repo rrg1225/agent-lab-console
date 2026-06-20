@@ -18,6 +18,7 @@ Agent Lab Console is a portfolio-ready AI agent engineering demo. It shows how t
 - **工具权限模型**：工具被标记为 `read` 或 `write-dry-run`，外部写入默认只生成 dry-run 对象。
 - **Guardrails**：阻断危险删除、绕过系统指令、关闭审计等高风险请求。
 - **场景化 Eval**：`npm run eval` 覆盖成功、阻断、短任务等回归场景。
+- **可下载 Trace**：每次运行都能下载 JSON trace，方便审计、复盘或接入后续 eval pipeline。
 - **无需 API Key**：确定性 planner 保证 demo 可重复、可测试、可离线展示。
 - **可扩展 provider**：`.env.example` 已预留 OpenAI-compatible、Gemini、DashScope 配置位。
 
@@ -77,6 +78,7 @@ Agent Lab Console is an auditable agent workflow demo. It does not require model
 - **Tool permission model** with `read` and `write-dry-run` capability labels.
 - **Guardrails** for destructive operations, instruction overrides, and audit bypass attempts.
 - **Scenario evals** via `npm run eval` for regression-friendly agent behavior.
+- **Downloadable traces** so every run can be audited, replayed, or fed into a later eval pipeline.
 - **No API key required** because the built-in planner is deterministic.
 - **Provider-ready config** through `.env.example` for OpenAI-compatible, Gemini, and DashScope integrations.
 

@@ -13,7 +13,8 @@ body {
 }
 
 button,
-textarea {
+textarea,
+input {
   font: inherit;
 }
 
@@ -105,6 +106,15 @@ textarea {
   color: #111827;
 }
 
+input[type="range"] {
+  accent-color: #111827;
+}
+
+.range-value {
+  color: #64748b;
+  font-size: 12px;
+}
+
 button {
   border: 0;
   border-radius: 8px;
@@ -167,6 +177,21 @@ button:disabled {
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.download-btn {
+  border: 1px solid #d5deeb;
+  background: #fff;
+  color: #111827;
+  padding: 8px 10px;
+  font-size: 12px;
 }
 
 .status.completed {

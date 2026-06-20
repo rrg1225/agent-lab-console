@@ -9,6 +9,7 @@ const examples = [
 
 export default function App() {
   const [task, setTask] = useState(starterTask);
+  const [maxSteps, setMaxSteps] = useState(6);
   const [tools, setTools] = useState([]);
   const [run, setRun] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function App() {
       const response = await fetch("/api/runs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task, mode: "dry-run", maxSteps: 6 })
+        body: JSON.stringify({ task, mode: "dry-run", maxSteps })
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || payload.final?.reason || "Agent run failed");
@@ -40,6 +41,17 @@ export default function App() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function downloadTrace() {
+    if (!run) return;
+    const blob = new Blob([JSON.stringify(run, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${run.runId}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -56,6 +68,11 @@ export default function App() {
           <label>
             Task
             <textarea value={task} onChange={(event) => setTask(event.target.value)} />
+          </label>
+          <label>
+            Max steps
+            <input type="range" min="3" max="10" value={maxSteps} onChange={(event) => setMaxSteps(Number(event.target.value))} />
+            <span className="range-value">{maxSteps} steps</span>
           </label>
           <div className="examples" aria-label="Example tasks">
             {examples.map((example) => (
@@ -90,7 +107,10 @@ export default function App() {
             <p className="muted">Run the default task or write your own agent workflow request.</p>
           ) : (
             <div className="result">
-              <div className={`status ${run.status}`}>{run.status}</div>
+              <div className="result-heading">
+                <div className={`status ${run.status}`}>{run.status}</div>
+                <button type="button" className="download-btn" onClick={downloadTrace}>Download trace</button>
+              </div>
               <p>{run.final.summary}</p>
               <div className="cards">
                 <Metric label="Trace events" value={run.trace.length} />
