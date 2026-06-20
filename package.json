@@ -1,0 +1,36 @@
+{
+  "name": "agent-lab-console",
+  "version": "1.0.0",
+  "description": "An AI agent development console with tool permissions, guardrails, trace replay, and evaluation scenarios.",
+  "type": "module",
+  "license": "MIT",
+  "author": "lixian",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "node --watch server/index.js",
+    "dev:client": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "test": "node --test",
+    "eval": "node eval/scenarios.test.js"
+  },
+  "keywords": [
+    "ai-agent",
+    "agentic-workflow",
+    "tool-calling",
+    "guardrails",
+    "evaluation",
+    "react",
+    "express"
+  ],
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "vite": "^6.4.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {}
+}
