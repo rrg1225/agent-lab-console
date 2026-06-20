@@ -16,7 +16,7 @@ export function evaluateRisk(task, proposedAction) {
     };
   }
 
-  if (/deploy|email|notify|write|create ticket/i.test(combined)) {
+  if (/deploy|email|notify|write|create ticket|handoff ticket|issue/i.test(combined)) {
     return {
       level: "review",
       reason: "The action changes external state; dry-run mode will produce a plan instead of executing."

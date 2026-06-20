@@ -74,6 +74,20 @@ h2 {
   padding: 18px;
 }
 
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.examples button {
+  border: 1px solid #d5deeb;
+  background: #f8fafc;
+  color: #243244;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
 label {
   display: grid;
   gap: 8px;
@@ -186,6 +200,38 @@ button:disabled {
 .metric span {
   color: #64748b;
   font-size: 12px;
+}
+
+.risk {
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.risk strong {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.risk span {
+  color: #526174;
+}
+
+.risk-low {
+  background: #effdf5;
+  color: #047857;
+}
+
+.risk-review {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.risk-blocked {
+  background: #fff1f2;
+  color: #be123c;
 }
 
 .timeline {

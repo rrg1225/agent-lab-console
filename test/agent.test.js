@@ -15,3 +15,11 @@ test("blocks unsafe destructive instructions", async () => {
   assert.equal(run.status, "blocked");
   assert.match(run.final.summary, /Blocked safely/);
 });
+
+test("marks external write style tasks for dry-run review", async () => {
+  const run = await runAgent("Create a handoff ticket for the support team", { maxSteps: 6 });
+  assert.equal(run.status, "completed");
+  assert.equal(run.risk.level, "review");
+  assert.ok(run.observations.some((item) => item.tool === "create_ticket"));
+  assert.equal(run.observations.find((item) => item.tool === "create_ticket").output.externalWritePerformed, false);
+});
