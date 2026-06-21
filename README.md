@@ -4,6 +4,8 @@
 
 Agent Lab Console is a portfolio-ready AI agent engineering demo. It shows how to build a tool-using workflow with explicit permissions, deterministic planning, guardrails, trace persistence, and scenario-based evals.
 
+> Resume and interview brief: [PORTFOLIO.md](PORTFOLIO.md)
+
 ---
 
 ## 简体中文
