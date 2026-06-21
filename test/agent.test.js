@@ -8,6 +8,10 @@ test("completes a dry-run planning task with trace events", async () => {
   assert.ok(run.trace.length >= 3);
   assert.ok(run.observations.some((item) => item.tool === "risk_check"));
   assert.ok(run.observations.some((item) => item.tool === "draft_execution_plan"));
+  assert.equal(run.final.quality.grounded, true);
+  assert.equal(run.final.quality.riskChecked, true);
+  assert.equal(run.final.quality.externalWrites, 0);
+  assert.ok(Number.isFinite(run.durationMs));
 });
 
 test("blocks unsafe destructive instructions", async () => {

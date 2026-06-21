@@ -5,6 +5,7 @@ export async function runAgent(task, options = {}) {
   const maxSteps = Number(options.maxSteps || process.env.AGENT_MAX_STEPS || 6);
   const state = {
     runId: `run_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+    startedAt: new Date().toISOString(),
     task: String(task || "").trim(),
     mode: options.mode || process.env.AGENT_MODE || "dry-run",
     observations: [],
@@ -58,14 +59,29 @@ function validateObservation(observation) {
 
 function finish(state, status, reason) {
   state.status = status;
+  state.completedAt = new Date().toISOString();
+  state.durationMs = Math.max(0, Date.parse(state.completedAt) - Date.parse(state.startedAt));
   state.final = {
     status,
     reason,
     summary: summarize(state),
     observations: state.observations.length,
-    mode: state.mode
+    mode: state.mode,
+    quality: assessRunQuality(state)
   };
   return state;
+}
+
+function assessRunQuality(state) {
+  const usedTools = new Set(state.observations.map((item) => item.tool));
+  const validationEvents = state.trace.filter((item) => item.phase === "validate");
+  return {
+    grounded: usedTools.has("search_knowledge"),
+    riskChecked: usedTools.has("risk_check") || Boolean(state.risk),
+    dryRunOnly: state.mode === "dry-run",
+    validationEvents: validationEvents.length,
+    externalWrites: state.observations.filter((item) => item.output?.externalWritePerformed).length
+  };
 }
 
 function summarize(state) {
