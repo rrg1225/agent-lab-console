@@ -5,12 +5,15 @@ import { dirname, join, resolve } from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
 import { runAgent } from "./agent/loop.js";
 import { toolCatalog } from "./agent/tools.js";
+import { createRuntimeState, installRuntimeControls, runtimeMetrics } from "./runtime.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, "..");
 
 export function createApp() {
   const app = express();
+  const runtime = createRuntimeState("agent-lab-console");
+  installRuntimeControls(app, runtime);
   app.use(cors());
   app.use(express.json({ limit: "256kb" }));
 
@@ -20,6 +23,10 @@ export function createApp() {
 
   app.get("/api/tools", (_req, res) => {
     res.json(toolCatalog);
+  });
+
+  app.get("/api/metrics/runtime", (_req, res) => {
+    res.json(runtimeMetrics(runtime));
   });
 
   app.post("/api/runs", async (req, res, next) => {
