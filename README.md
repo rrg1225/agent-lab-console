@@ -10,17 +10,17 @@ Agent Lab Console is a portfolio-ready AI agent engineering demo. It shows how t
 
 ### 项目定位
 
-这是一个“可审计 Agent 控制台”demo：它不依赖真实模型 Key，也不会执行真实外部写入。默认使用确定性 planner，让评审者克隆后马上看到 agent 如何观察任务、判断风险、调用工具、验证输出并停止。
+这是一个“可审计 Agent 控制台”演示项目。它不依赖真实模型 Key，也不会执行真实外部写入；默认使用确定性 planner，让评审者克隆后马上看到 agent 如何观察任务、判断风险、调用工具、验证输出并停止。
 
 ### 核心亮点
 
-- **Observe / Decide / Act / Validate Loop**：每一步都进入 trace timeline，方便复盘。
+- **Observe / Decide / Act / Validate loop**：每一步都进入 trace timeline，便于复盘和演示。
 - **工具权限模型**：工具被标记为 `read` 或 `write-dry-run`，外部写入默认只生成 dry-run 对象。
-- **Guardrails**：阻断危险删除、绕过系统指令、关闭审计等高风险请求。
-- **场景化 Eval**：`npm run eval` 覆盖成功、阻断、短任务等回归场景。
-- **可下载 Trace**：每次运行都能下载 JSON trace，方便审计、复盘或接入后续 eval pipeline。
+- **Guardrails**：阻断危险删除、系统指令绕过、关闭审计等高风险请求。
+- **场景化 Eval**：`npm run eval` 覆盖成功、阻断和短任务等回归场景。
+- **Trace 可下载**：每次运行都能下载 JSON trace，方便接入后续评测流水线。
 - **无需 API Key**：确定性 planner 保证 demo 可重复、可测试、可离线展示。
-- **可扩展 provider**：`.env.example` 已预留 OpenAI-compatible、Gemini、DashScope 配置位。
+- **Provider-ready 配置**：`.env.example` 预留 OpenAI-compatible、Gemini 和 DashScope 配置位。
 
 ### 快速开始
 
@@ -62,7 +62,7 @@ finish, escalate, or continue
 
 ### 为什么适合作品集
 
-这个 demo 展示了 agent 工程里比“调模型”更重要的部分：权限边界、可重复测试、风险分级、trace 可观测性、失败/阻断路径，以及外部写入的 dry-run 设计。
+这个项目展示了 agent 工程里比“调模型”更重要的部分：权限边界、可重复测试、风险分级、trace 可观测性、失败阻断路径，以及外部写入的 dry-run 设计。
 
 ---
 
@@ -101,17 +101,6 @@ npm test         # run unit tests
 npm run eval     # run agent scenario evals
 ```
 
-### Agent Loop
-
-```text
-observe task
-decide next action
-act through one narrow tool
-validate tool output
-update state
-finish, escalate, or continue
-```
-
 ### API Surface
 
 | Method | Endpoint | Purpose |
@@ -119,10 +108,6 @@ finish, escalate, or continue
 | `GET` | `/api/health` | Health check |
 | `GET` | `/api/tools` | Tool catalog and permission labels |
 | `POST` | `/api/runs` | Execute a dry-run agent run and persist its trace |
-
-### Portfolio Value
-
-This project demonstrates the engineering layer behind useful agents: permission boundaries, deterministic tests, risk classification, trace observability, blocked paths, and dry-run external writes.
 
 ## Repository Topics
 
