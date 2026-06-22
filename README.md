@@ -1,99 +1,90 @@
 # Agent Lab Console
 
-[简体中文](#简体中文) | [English](#english)
+[![CI](https://github.com/rrg1225/agent-lab-console/actions/workflows/ci.yml/badge.svg)](https://github.com/rrg1225/agent-lab-console/actions/workflows/ci.yml)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![Express](https://img.shields.io/badge/Express-API-111827?logo=express)
+![Agent](https://img.shields.io/badge/AI-Agent%20Workflow-7C3AED)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-Agent Lab Console is a portfolio-ready AI agent engineering demo. It shows how to build a tool-using workflow with explicit permissions, deterministic planning, guardrails, trace persistence, runtime observability, and scenario-based evals.
+Agent Lab Console is a portfolio-grade AI agent engineering console. It demonstrates a deterministic agent loop with tool permissions, guardrails, dry-run external writes, trace persistence, runtime metrics, and a polished React dashboard.
 
 > Resume and interview brief: [PORTFOLIO.md](PORTFOLIO.md)
 > Enterprise architecture: [docs/ENTERPRISE_ARCHITECTURE.md](docs/ENTERPRISE_ARCHITECTURE.md)
 
----
+## Why This Project Matters
 
-## 简体中文
+Most agent demos stop at a chat box. This project focuses on the engineering layer that makes agents reviewable and safer: explicit tools, policy gates, structured traces, bounded execution, and dry-run write behavior.
 
-### 项目定位
+## Features
 
-这是一个“可审计 Agent 控制台”演示项目。它不依赖真实模型 Key，也不会执行真实外部写入；默认使用确定性 planner，让评审者克隆后马上看到 agent 如何观察任务、判断风险、调用工具、验证输出并停止。
+- Deterministic observe -> decide -> act -> validate loop.
+- Tool catalog with `read` and `write-dry-run` permission labels.
+- Guardrails for destructive operations, instruction override attempts, and audit bypasses.
+- JSON trace persistence under `traces/` for replay and audit review.
+- Runtime request metrics at `/api/metrics/runtime`.
+- Request correlation through `x-request-id` and browser security headers.
+- React UI for task entry, trace timeline, risk status, and trace download.
 
-### 核心亮点
+## Architecture
 
-- **Observe / Decide / Act / Validate loop**：每一步都进入 trace timeline，便于复盘、演示和测试。
-- **工具权限模型**：工具被标记为 `read` 或 `write-dry-run`，外部写入默认只生成 dry-run 对象。
-- **Guardrails**：阻断危险删除、系统指令绕过、关闭审计等高风险请求。
-- **场景化 eval**：`npm run eval` 覆盖成功、阻断和短任务等回归场景。
-- **Trace 持久化**：每次运行都会写入 `traces/`，也可以从 UI 下载 JSON trace。
-- **工程化 API 层**：统一输入校验、结构化错误、请求 ID、404 和安全响应头。
-- **运行时指标**：`/api/metrics/runtime` 展示请求数、状态码分布、错误数和启动时间。
+```text
+React UI
+  -> Express API
+  -> Agent planner
+  -> Policy checks
+  -> Tool runner
+  -> Trace persistence
+```
 
-### 快速开始
+Key modules:
+
+| Path | Purpose |
+| --- | --- |
+| `server/agent/loop.js` | Agent state machine and execution lifecycle |
+| `server/agent/planner.js` | Deterministic next-action selection |
+| `server/agent/policies.js` | Risk and guardrail rules |
+| `server/agent/tools.js` | Tool registry and dry-run implementations |
+| `server/http.js` | Shared API errors, async routes, and 404 handling |
+| `src/App.jsx` | Agent console UI |
+
+## Quick Start
 
 ```bash
 npm install
 npm run dev
 ```
 
-打开 `http://localhost:5173`。API 默认运行在 `http://localhost:4320`。
+Open `http://localhost:5173`. The API defaults to `http://localhost:4320`.
 
-### 常用命令
+## Scripts
 
 ```bash
-npm run dev      # 同时启动 API 和 Vite
-npm run build    # 构建前端
-npm run start    # 启动 Express 并托管 dist
-npm test         # 运行单元测试
-npm run eval     # 运行 agent 场景评测
+npm run dev      # start API and Vite together
+npm run build    # build the React app
+npm run start    # serve Express and built frontend
+npm run eval     # run deterministic scenario evals
 ```
 
-### API 一览
+## API
 
-| Method | Endpoint | 说明 |
+| Method | Endpoint | Description |
 | --- | --- | --- |
-| `GET` | `/api/health` | 服务健康检查 |
-| `GET` | `/api/tools` | 返回工具目录与权限标签 |
-| `GET` | `/api/metrics/runtime` | 返回运行时请求指标 |
-| `POST` | `/api/runs` | 执行一次 dry-run agent run 并持久化 trace |
+| `GET` | `/api/health` | Service health and current mode |
+| `GET` | `/api/tools` | Tool catalog and permission classes |
+| `GET` | `/api/metrics/runtime` | Runtime request and status metrics |
+| `POST` | `/api/runs` | Execute a dry-run agent run and persist trace |
 
-### 作品集价值
+## Safety Model
 
-这个项目展示了 agent 工程里比“调模型”更重要的部分：权限边界、可重复测试、风险分级、trace 可观测性、失败阻断路径，以及外部写入的 dry-run 设计。
+- External writes are represented as dry-run objects.
+- Dangerous tasks are blocked before tool execution.
+- Request IDs are returned in response headers and structured errors.
+- Provider keys are intentionally not required for the deterministic demo.
 
----
+## GitHub Readiness
 
-## English
+The repository includes CI, production build scripts, architecture notes, interview positioning, and a deterministic demo path that works without API keys.
 
-### What It Is
+## License
 
-Agent Lab Console is an auditable agent workflow demo. It does not require model keys and does not perform real external writes. The deterministic planner makes every run repeatable for reviewers and tests.
-
-### Highlights
-
-- **Observe / Decide / Act / Validate loop** with a visible trace timeline.
-- **Tool permission model** with `read` and `write-dry-run` capability labels.
-- **Guardrails** for destructive operations, instruction overrides, and audit bypass attempts.
-- **Scenario evals** via `npm run eval` for regression-friendly agent behavior.
-- **Downloadable and persisted traces** for audit replay or later eval pipelines.
-- **Hardened API layer** with input validation, structured errors, request IDs, 404s, and security headers.
-- **Runtime metrics** via `/api/metrics/runtime`.
-
-### Quick Start
-
-```bash
-npm install
-npm run dev
-```
-
-Open `http://localhost:5173`. The API runs on `http://localhost:4320`.
-
-### Scripts
-
-```bash
-npm run dev
-npm run build
-npm run start
-npm test
-npm run eval
-```
-
-### Repository Topics
-
-`ai-agent`, `tool-calling`, `agentic-workflow`, `guardrails`, `evaluation`, `react`, `express`
+MIT

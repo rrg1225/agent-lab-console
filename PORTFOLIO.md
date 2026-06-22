@@ -4,7 +4,7 @@
 
 - Built an auditable AI agent console with deterministic planning, explicit tool permissions, policy guardrails, persisted traces, and scenario-based evals.
 - Designed an observe-decide-act-validate loop that blocks unsafe instructions and converts external writes into dry-run artifacts.
-- Added regression coverage for safe planning, destructive requests, ambiguous tasks, and tool-use behavior using Node's built-in test runner.
+- Built deterministic scenario evals for safe planning, destructive requests, ambiguous tasks, and tool-use behavior.
 
 ## What This Proves
 
@@ -16,7 +16,6 @@
 
 ```bash
 npm ci
-npm test
 npm run eval
 npm run build
 ```
