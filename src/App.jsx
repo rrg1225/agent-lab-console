@@ -34,7 +34,7 @@ export default function App() {
         body: JSON.stringify({ task, mode: "dry-run", maxSteps })
       });
       const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || payload.final?.reason || "Agent run failed");
+      if (!response.ok) throw new Error(payload.error?.message || payload.error || payload.final?.reason || "Agent run failed");
       setRun(payload);
     } catch (err) {
       setError(err.message);

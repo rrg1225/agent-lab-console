@@ -20,3 +20,26 @@ test("exposes runtime metrics and request correlation headers", async () => {
     await new Promise((resolve) => server.close(resolve));
   }
 });
+
+test("validates agent run requests with structured errors", async () => {
+  const server = createApp().listen(0);
+  try {
+    const baseUrl = `http://127.0.0.1:${server.address().port}`;
+    const response = await fetch(`${baseUrl}/api/runs`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-request-id": "invalid-agent-run"
+      },
+      body: JSON.stringify({ task: "go" })
+    });
+    const payload = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(payload.error.code, "invalid_request");
+    assert.equal(payload.error.requestId, "invalid-agent-run");
+    assert.equal(payload.service, "agent-lab-console");
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+});
