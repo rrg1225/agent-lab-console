@@ -2,7 +2,7 @@ import { decideNextAction } from "./planner.js";
 import { runTool } from "./tools.js";
 
 export async function runAgent(task, options = {}) {
-  const maxSteps = Number(options.maxSteps || process.env.AGENT_MAX_STEPS || 6);
+  const maxSteps = clampSteps(options.maxSteps || process.env.AGENT_MAX_STEPS || 6);
   const state = {
     runId: `run_${Date.now()}_${Math.random().toString(16).slice(2)}`,
     startedAt: new Date().toISOString(),
@@ -47,6 +47,12 @@ export async function runAgent(task, options = {}) {
   }
 
   return finish(state, "blocked", "Maximum step count reached before completion.");
+}
+
+function clampSteps(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 6;
+  return Math.max(3, Math.min(12, Math.round(parsed)));
 }
 
 function validateObservation(observation) {

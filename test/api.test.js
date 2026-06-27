@@ -16,6 +16,8 @@ test("exposes health, tools, and deterministic run APIs", async (t) => {
 
   const health = await fetch(`${baseUrl}/api/health`);
   assert.equal(health.status, 200);
+  assert.equal(health.headers.get("x-frame-options"), "DENY");
+  assert.match(health.headers.get("content-security-policy"), /frame-ancestors 'none'/);
   assert.equal((await health.json()).service, "agent-lab-console");
 
   const tools = await fetch(`${baseUrl}/api/tools`);
@@ -31,4 +33,21 @@ test("exposes health, tools, and deterministic run APIs", async (t) => {
   const body = await run.json();
   assert.equal(body.status, "completed");
   assert.equal(body.final.quality.dryRunOnly, true);
+});
+
+test("clamps oversized agent step requests", async (t) => {
+  const { server, baseUrl } = await startServer();
+  t.after(() => server.close());
+
+  const run = await fetch(`${baseUrl}/api/runs`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      task: "Create a handoff ticket for the onboarding workflow",
+      maxSteps: 1000
+    })
+  });
+  assert.equal(run.status, 200);
+  const body = await run.json();
+  assert.ok(body.trace.length <= 36);
 });
