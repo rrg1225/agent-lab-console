@@ -85,6 +85,19 @@ npm run eval     # run deterministic scenario evals
 
 The repository includes CI, production build scripts, architecture notes, interview positioning, and a deterministic demo path that works without API keys.
 
+## Quality Gates
+
+- `npm test` runs API smoke coverage and deterministic agent evaluation scenarios.
+- `npm run build` validates the production React bundle.
+- GitHub Actions runs tests and build on pull requests and `main`.
+- Trace JSON files are generated locally and ignored by Git to keep audit data out of commits.
+
+## Roadmap
+
+- Add trace replay diffing for prompt and policy changes.
+- Add pluggable model/provider adapters behind the deterministic planner.
+- Add role-based tool approval states for reviewer workflows.
+
 ## License
 
 MIT

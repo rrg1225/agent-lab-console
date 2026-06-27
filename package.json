@@ -11,7 +11,8 @@
     "dev:client": "vite --host 0.0.0.0",
     "build": "vite build",
     "start": "node server/index.js",
-    "eval": "node eval/scenarios.test.js"
+    "eval": "node eval/scenarios.test.js",
+    "test": "node --test test/*.test.js && npm run eval"
   },
   "keywords": [
     "ai-agent",

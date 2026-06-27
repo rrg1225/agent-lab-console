@@ -1,0 +1,34 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createApp } from "../server/index.js";
+
+async function startServer() {
+  const app = createApp();
+  const server = app.listen(0);
+  await new Promise((resolve) => server.once("listening", resolve));
+  const { port } = server.address();
+  return { server, baseUrl: `http://127.0.0.1:${port}` };
+}
+
+test("exposes health, tools, and deterministic run APIs", async (t) => {
+  const { server, baseUrl } = await startServer();
+  t.after(() => server.close());
+
+  const health = await fetch(`${baseUrl}/api/health`);
+  assert.equal(health.status, 200);
+  assert.equal((await health.json()).service, "agent-lab-console");
+
+  const tools = await fetch(`${baseUrl}/api/tools`);
+  assert.equal(tools.status, 200);
+  assert.ok(Array.isArray(await tools.json()));
+
+  const run = await fetch(`${baseUrl}/api/runs`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ task: "Draft a safe onboarding plan for a new agent workflow" })
+  });
+  assert.equal(run.status, 200);
+  const body = await run.json();
+  assert.equal(body.status, "completed");
+  assert.equal(body.final.quality.dryRunOnly, true);
+});
