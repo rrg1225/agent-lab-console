@@ -21,7 +21,7 @@ Most agent demos stop at a chat box. This project focuses on the engineering lay
 - Tool catalog with `read` and `write-dry-run` permission labels.
 - Guardrails for destructive operations, instruction override attempts, and audit bypasses.
 - JSON trace persistence under `traces/` for replay and audit review.
-- Runtime request metrics at `/api/metrics/runtime`.
+- Runtime request metrics and operational scorecard APIs.
 - Request correlation through `x-request-id` and browser security headers.
 - React UI for task entry, trace timeline, risk status, and trace download.
 
@@ -72,6 +72,7 @@ npm run eval     # run deterministic scenario evals
 | `GET` | `/api/health` | Service health and current mode |
 | `GET` | `/api/tools` | Tool catalog and permission classes |
 | `GET` | `/api/metrics/runtime` | Runtime request and status metrics |
+| `GET` | `/api/metrics/scorecard` | Operational readiness score and checks |
 | `POST` | `/api/runs` | Execute a dry-run agent run and persist trace |
 
 ## Safety Model

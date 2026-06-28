@@ -51,3 +51,14 @@ test("clamps oversized agent step requests", async (t) => {
   const body = await run.json();
   assert.ok(body.trace.length <= 36);
 });
+
+test("exposes an operational scorecard", async (t) => {
+  const { server, baseUrl } = await startServer();
+  t.after(() => server.close());
+
+  const response = await fetch(`${baseUrl}/api/metrics/scorecard`);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.grade, "A");
+  assert.ok(body.checks.some((check) => check.id === "request_correlation"));
+});
